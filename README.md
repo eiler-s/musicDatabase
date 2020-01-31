@@ -19,4 +19,4 @@ Once this is done, "make collatz.log" will run the recipe regardless of whether 
 
 Note you need to upgrade the dependencies in rquirements.txt
 pip install -r requirements-to-freeze.txt --upgrade
-pip freeze > requirements.txt
+pip freeze > requirements.txt# Jeffersonballers
