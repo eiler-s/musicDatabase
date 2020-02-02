@@ -1,0 +1,14 @@
+Our primary dataset consists of multiple combined files from the 2015 American Communities Survey which is run by the US Census Bureau./
+According to the ACS website, the ACS is "the premier source for detailed population and housing information about our nation"./
+This dataset contains lots of different information about the population of various communities throughout the entire United States./
+Due to the size of the dataset and the amount of information it contained, we chose to narrow down the data. We decided to focus on the/
+southern United States, specifically Texas, Alabama, Georgia, Florida, Louisiana, Mississippi, South Carolina, Arkansas, Tennessee, North/
+Carolina, Oklahoma, Kentucky, Virginia and West Virginia. We also picked four categories of information to analyze in each of these states:
+Education, Language, Race and Age/Sex. The data was available in CSV files from data.world, and we combined the files for each state by/
+category to create a dataset that met the size requirements for the project.//
+
+
+
+DATA SOURCE/
+We initially found the data on data.world/
+We combined the data into four files.
