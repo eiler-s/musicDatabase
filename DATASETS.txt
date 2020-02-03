@@ -15,7 +15,6 @@ with codes that can be retrieved from the metadata that goes along with the CSVs
 header B01001_001 refers to "Sex by Age for Total Population". The entries in the cells are generally the population of people in that/
 state in that category./
 
-
 These files are of interest to us because of the depth of information conducted by the Census Bureau. While each CSV contains a separate/
 category of data, they can all be related together in order to be cross examined. For instance, the Language file, which contains rows/
 of estimated populations proficienty in language, splits the population into degrees of proficiency across many columns. These columns/
@@ -30,7 +29,7 @@ selected a secondary dataset. Fortunately, the generality of our primary dataset
 wide variety of fields including economics, epidemology, immigration, or even popular media./
 
 
-Each datafile in our dataset has many columns. We are only showing 10 columns in our sample data as an example./
+Each datafile in our dataset has many columns. We are only showing 5 columns in our sample data as an example./
 
 EDUCATION - SAMPLE DATA (total 366 cols)/
 GEOID		AreaName		(MALES 18-24) LESS THAN 9TH GRADE	(MALES 18-24) 9TH-12TH GRADE	(MALES 18-24) HIGH SCHOOL DIPLOMA/
