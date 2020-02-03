@@ -1,51 +1,67 @@
-Our primary dataset consists of multiple combined files from the 2015 American Communities Survey which is run by the US Census Bureau.
-According to the ACS website, the ACS is "the premier source for detailed population and housing information about our nation".
-This dataset contains lots of different information about the population of various communities throughout the entire United States.
-Due to the size of the dataset and the amount of information it contained, we chose to narrow down the data. We decided to focus on the
-southern United States, specifically Texas, Alabama, Georgia, Florida, Louisiana, Mississippi, South Carolina, Arkansas, Tennessee, North
-Carolina, Oklahoma, Kentucky, Virginia and West Virginia. We also picked four categories of information to analyze in each of these
-states: Education, Language, Race and Age&Sex. The data was available in CSV files from data.world, and we combined the files for each 
-state by category to create a dataset that met the size requirements for the project.
-
-The ACS data provides multiple levels of analysis for each category. For example, in the Sex&Age category, it provides Sex by Age for
-total population of each state, sex by age for men, sex by age for men under 5, sex by age for men 5 to 9... etc. The columns are named
-with codes that can be retrieved from the metadata that goes along with the CSVs on data.world. For example, in the Sex&Age file, column
-header B01001_001 refers to "Sex by Age for Total Population". The entries in the cells are generally the number of people in that
-state in that category. Each data file has many columns. We are only showing 10 columns here as an example.
-
-AGE&SEX - SAMPLE DATA (total 368 cols)
-SummaryLevel	State	StateFIPS	GEOID	    AreaName	            B01001_001	B01001_002	B01001_003	B01001_004	B01001_005
-40	          AL	  1					04000US01	Alabama	              4830620	    2341093	    150860	    156380	    161596	
-40	          AL	  1					04001US01	Alabama -- Urban	    2867593	    1369970	    93605	      95515	      93812
-40	          AL	  1					04043US01	Alabama -- Rural	    1963027	    971123	    57255	      60865	      67784	
-40	          AL	  1					040A0US01	Alabama -- In metro-  4202122     2033905     132427      137740      139487
-                                          politan or micro-
-                                          politan statistical
-                                          area
-
-EDUCATION - SAMPLE DATA (total 366 cols)
-SummaryLevel	State	StateFIPS	GEOID	    AreaName	            B15001_001	B15001_002	B15001_003	B15001_004	B15001_005
-40	          AL	  1					04000US01	Alabama	              3718646	    1773950	    241337	    5870	      39399
-40	          AL	  1					04001US01	Alabama -- Urban      2196425	    1030672	    157097	    3236	      23001
-40	          AL	  1					04043US01	Alabama -- Rural	    1522221	    743278	    84240	      2634	      16398
-40	          AL	  1					040A0US01	Alabama -- In metro-  3231598     1539164     212393      4844        33391
-                                          politan or micro-
-                                          politan statistical
-                                          area
-
-LANGUAGE - SAMPLE DATA (total 525 cols)
-SummaryLevel	State	StateFIPS	GEOID	    AreaName	            B16001_001	B16001_002	B16001_003	B16001_004	B16001_005
-40	          AL	  1					04000US01	Alabama	              4535566	    4300026	    150337	    77965	      72372
-40	          AL	  1					04001US01	Alabama -- Urban	    2681204	    2504513	    106550	    52993	      53557
-40	          AL	  1					04043US01	Alabama -- Rural	    1854362	    1795513	    43787	      24972	      18815
-40	          AL	  1					040A0US01	Alabama -- In metro-  3942782     3730300     130732      68447       62285
-                                          politan or micro-
-                                          politan statistical
-                                          area					
-
-DATA SOURCE/
-We initially found the data on data.world/
-We combined the data into four files.
+Our primary dataset consists of multiple combined files from the 2015 American Communities Survey which is run by the US Census Bureau./
+According to the ACS website, the ACS is "the premier source for detailed population and housing information about our nation"./
+This dataset contains lots of different information about the population of various communities throughout the entire United States./
+Due to the size of the dataset and the amount of information it contained, we chose to narrow down the data. We decided to focus on the/
+southern United States, specifically Texas, Alabama, Georgia, Florida, Louisiana, Mississippi, South Carolina, Arkansas, Tennessee, North/
+Carolina, Oklahoma, Kentucky, Virginia and West Virginia. We also picked four categories of information to analyze in each of these/
+states: Education, Language, Race and Age&Sex. The data was dowloaded in CSV files from data.world where each state had a seperate CSV/
+for each of the Census Bureau's categories. In order to meet the size requirements for the project we then combined all the states' data/
+into a single CSV for each category. As a result, we have five CSV files in our dataset, one for each category./
 
 
-*** ADD TO FILE BEFORE SUBMISSION: explanation of relationships between tables and why we are interested in analyzing it/what we hope to learn, etc.
+The ACS data provides multiple levels of analysis for each category. For example, in the Sex&Age category, it provides Sex by Age for/
+total population of each state, sex by age for men, sex by age for men under 5, sex by age for men 5 to 9... etc. The columns are named/
+with codes that can be retrieved from the metadata that goes along with the CSVs on data.world. For example, in the Sex&Age file, column/
+header B01001_001 refers to "Sex by Age for Total Population". The entries in the cells are generally the population of people in that/
+state in that category./
+
+
+These files are of interest to us because of the depth of information conducted by the Census Bureau. While each CSV contains a separate/
+category of data, they can all be related together in order to be cross examined. For instance, the Language file, which contains rows/
+of estimated populations proficienty in language, splits the population into degrees of proficiency across many columns. These columns/
+contain farther designations, indicating the subpopulations of those proficient in English by race. These columns could be compared to the/
+Race datafile to determine what percentage of the local racial population is proficient in English. Likewise, in the Language file there is/
+a column detailing the educational attainment of citizens older than 25 who are proficient in English, which could be compared with the/
+Education file, which provides more data about the educational attainment within the population./
+
+
+Although we have selected this dataset as our primary dataset due to its immense detail and interrelations between the files, we have not yet/
+selected a secondary dataset. Fortunately, the generality of our primary dataset would make it well suited for correlation with data from a/
+wide variety of fields including economics, epidemology, immigration, or even popular media./
+
+
+Each datafile in our dataset has many columns. We are only showing 10 columns in our sample data as an example./
+
+EDUCATION - SAMPLE DATA (total 366 cols)/
+GEOID		AreaName		(MALES 18-24) LESS THAN 9TH GRADE	(MALES 18-24) 9TH-12TH GRADE	(MALES 18-24) HIGH SCHOOL DIPLOMA/
+04000US01	Alabama			5870					39399				80453/
+04001US01	Alabama -- Urban	3236					23001				47196/
+04043US01	Alabama -- Rural	2634					16398				33257/
+
+
+SEX&AGE - SAMPLE DATA (total 368 cols)/
+GEOID		AreaName		(MALES) AGE UNDER 5	(MALES) AGE 5-9		(MALES) AGE 10-14/
+04000US01	Alabama			150860			156380			161596/
+04001US01	Alabama -- Urban	93605			95515			93812/
+04043US01	Alabama -- Rural	57255			60865			67784/
+
+
+RACE - SAMPLE DATA (total 225 cols)/
+GEOID		AreaName		TOTAL POP.	WHITE POP.	BLACK POP./
+04000US01	Alabama			4830620		3325464		1276544/
+04001US01	Alabama -- Urban	2867593		1744088		966888/
+04043US01	Alabama -- Rural	1963027		1581376		309656/
+
+
+EARNINGS - SAMPLE DATA (total 1,100 cols)/
+GEOID		AreaName		(MALES 16+) $1-$2499 OR LOSS	(MALES 16+) $2500-$4999		(MALES 16+) $5000-$7499/
+04000US01	Alabama			68391				45991				47703/
+04001US01	Alabama -- Urban	43914				29982				30569/
+04043US01	Alabama -- Rural	24477				16009				17134/
+
+
+LANGUAGE - SAMPLE DATA (total 525 cols)/
+GEOID		AreaName		(POP. AGE 5+)	(POP. AGE 5+) ENGLISH ONLY	(POP. AGE 5+) SPANISH/
+04000US01	Alabama			4535566		4300026				150337/
+04001US01	Alabama -- Urban	2681204		2504513				106550/
+04043US01	Alabama -- Rural	1854362		1795513				43787/
