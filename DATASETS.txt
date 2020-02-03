@@ -3,11 +3,10 @@ According to the ACS website, the ACS is "the premier source for detailed popula
 This dataset contains lots of different information about the population of various communities throughout the entire United States./
 Due to the size of the dataset and the amount of information it contained, we chose to narrow down the data. We decided to focus on the/
 southern United States, specifically Texas, Alabama, Georgia, Florida, Louisiana, Mississippi, South Carolina, Arkansas, Tennessee, North/
-Carolina, Oklahoma, Kentucky, Virginia and West Virginia. We also picked four categories of information to analyze in each of these/
-states: Education, Language, Race and Age&Sex. The data was dowloaded in CSV files from data.world where each state had a seperate CSV/
+Carolina, Oklahoma, Kentucky, Virginia and West Virginia. We also picked five categories of information to analyze in each of these/
+states: Education, Language, Race, Earnings and Age&Sex. The data was dowloaded in CSV files from data.world where each state had a seperate CSV/
 for each of the Census Bureau's categories. In order to meet the size requirements for the project we then combined all the states' data/
 into a single CSV for each category. As a result, we have five CSV files in our dataset, one for each category./
-
 
 The ACS data provides multiple levels of analysis for each category. For example, in the Sex&Age category, it provides Sex by Age for/
 total population of each state, sex by age for men, sex by age for men under 5, sex by age for men 5 to 9... etc. The columns are named/
@@ -64,3 +63,13 @@ GEOID		AreaName		(POP. AGE 5+)	(POP. AGE 5+) ENGLISH ONLY	(POP. AGE 5+) SPANISH/
 04000US01	Alabama			4535566		4300026				150337/
 04001US01	Alabama -- Urban	2681204		2504513				106550/
 04043US01	Alabama -- Rural	1854362		1795513				43787/
+
+The original source for the data is data.world
+- Language: https://data.world/uscensusbureau/acs-2015-5-e-language
+- Education: https://data.world/uscensusbureau/acs-2015-5-e-education
+- Earnings: https://data.world/uscensusbureau/acs-2015-5-e-earnings
+- Sex&Age: https://data.world/uscensusbureau/acs-2015-5-e-agesex
+- Race: https://data.world/uscensusbureau/acs-2015-5-e-race
+
+The specific files we used and csv compilations of the data from the relevant states are located in our google drive:
+https://drive.google.com/drive/u/0/folders/1DYz3r3CtmNtWKYI8eNaS9F72JBIhlGvI
