@@ -3,7 +3,8 @@ Please note that we just switched our primary dataset from US Census data to mus
 We have modeled our staging tables in the ERD diagram. This diagram also represents our modeled tables as well because our 
 staging tables did not require any transformations. That is to say that our staging tables already contained distinct entities 
 and did not present any referential integrity violations nor contain duplicate records. Each table has a valid primary key, 
-which we have identified in the ERD.
+which we have identified in the ERD. That being said, the Event, URL, and Work tables are not related to any other table and are
+likely data tables that MusicBrainz was still developing.
 
 There should be a PK-FK relationship between the Release_Group and Release tables. Release_Group.id should be a primary key 
 refering to the foreign key Release.release_group. However, we had to omit some rows of each of our tables when ingesting the 
