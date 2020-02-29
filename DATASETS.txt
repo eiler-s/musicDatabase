@@ -1,75 +1,133 @@
-Our primary dataset consists of multiple combined files from the 2015 American Communities Survey which is run by the US Census Bureau./
-According to the ACS website, the ACS is "the premier source for detailed population and housing information about our nation"./
-This dataset contains lots of different information about the population of various communities throughout the entire United States./
-Due to the size of the dataset and the amount of information it contained, we chose to narrow down the data. We decided to focus on the/
-southern United States, specifically Texas, Alabama, Georgia, Florida, Louisiana, Mississippi, South Carolina, Arkansas, Tennessee, North/
-Carolina, Oklahoma, Kentucky, Virginia and West Virginia. We also picked five categories of information to analyze in each of these/
-states: Education, Language, Race, Earnings and Age&Sex. The data was dowloaded in CSV files from data.world where each state had a seperate CSV/
-for each of the Census Bureau's categories. In order to meet the size requirements for the project we then combined all the states' data/
-into a single CSV for each category. As a result, we have five CSV files in our dataset, one for each category./
+Our primary dataset is the MusicBrainz database dataset. MusicBrainz is an open-source project that allows users to use the organization's /
+software to upload information about different music entities such as records released, the works performed in releases, associated /
+record labels, language and area of artist origin, etc. This information is compiled in the MusicBrainz database and website, where /
+users can rate music entities by percieved likeability and suggest edits to the information existing in the database./
 
-The ACS data provides multiple levels of analysis for each category. For example, in the Sex&Age category, it provides Sex by Age for/
-total population of each state, sex by age for men, sex by age for men under 5, sex by age for men 5 to 9... etc. The columns are named/
-with codes that can be retrieved from the metadata that goes along with the CSVs on data.world. For example, in the Sex&Age file, column/
-header B01001_001 refers to "Sex by Age for Total Population". The entries in the cells are generally the population of people in that/
-state in that category./
-
-These files are of interest to us because of the depth of information conducted by the Census Bureau. While each CSV contains a separate/
-category of data, they can all be related together in order to be cross examined. For instance, the Language file, which contains rows/
-of estimated populations proficienty in language, splits the population into degrees of proficiency across many columns. These columns/
-contain farther designations, indicating the subpopulations of those proficient in English by race. These columns could be compared to the/
-Race datafile to determine what percentage of the local racial population is proficient in English. Likewise, in the Language file there is/
-a column detailing the educational attainment of citizens older than 25 who are proficient in English, which could be compared with the/
-Education file, which provides more data about the educational attainment within the population./
+We downloaded raw data dumps from the MusicBrainz project without schema specifications. Although there is an ERD on MusicBrainz's website, /
+it is not current with the database's state, we have had to manually identify column names and types using provided contextual information /
+about the entities. We then uploaded the datadumps with manual schemas to the Google Cloud Platform. The datatables meet our project /
+requirements of the existence of columns containing valid potential primary keys, as well as the existence of relationships /
+between the individual tables. At least 5 tables meet the size requirements for our project. For instance, a music artist is described as /
+coming from a certain area can be related to the recordings they produced, which in turn have attributes describing the area the records were /
+made. Finally, these area keys can also be used to find recording locations, record labels, and live music events that take place in the /
+same area. Date information exist in many tables to describe what time period a particular music entity was active or created./
 
 
-Although we have selected this dataset as our primary dataset due to its immense detail and interrelations between the files, we have not yet/
-selected a secondary dataset. Fortunately, the generality of our primary dataset would make it well suited for correlation with data from a/
-wide variety of fields including economics, epidemology, immigration, or even popular media./
+There are 19 tables in this dataset. The dataset can be downloaded using FTP and the instructions given at the following link: /
+https://musicbrainz.org/doc/MusicBrainz_Database/Download /
+
+We show sample data each table below: /
+
+AREA - SAMPLE DATA: /
+area_id gid area_name   area_type   edits_pend /
+15449	2913ad77-cec8-4d2f-98d3-d4aa46ab73bc	Greccio	4	0	2013-07-21 22:47:57.660809+00	\N	\N	\N	\N	\N	\N	f	/
+38	    71bbafaa-e825-3e15-8ca9-017dcad1748b	Canada	1	0	2013-05-27 13:15:52.179105+00	\N	\N	\N	\N	\N	\N	f	/
+43	    82d5f4d6-aed4-3ff5-81d1-5363ac6e97a7	Chile	1	0	2013-05-27 12:52:17.320228+00	\N	\N	\N	\N	\N	\N	f	/
+
+AREA_TYPE - SAMPLE DATA: /
+area_type_id    area_type   null_col    sort_area_type  area_comment /
+1	Country	\N	1	Country is used for areas included (or previously included) in ISO 3166-1, e.g. United States. /
+2	Subdivision	\N	2	Subdivision is used for the main administrative divisions of a country, e.g. California, Ontario, Okinawa. These are considered when displaying the parent areas for a given area. /
+7	County	\N	7	County is used for smaller administrative divisions of a country which are not the main administrative divisions but are also not municipalities, e.g. counties in the USA. These are not considered when displaying the parent areas for a given area. /
+
+ARTIST - SAMPLE DATA: /
+artist_id   gid artist_name sort_name   begin_year /
+805192	8972b1c1-6482-4750-b51f-596d2edea8b1	WIK▲N	WIK▲N	\N	\N /
+371203	49add228-eac5-4de8-836c-d75cde7369c3	Pete Moutso	Moutso, Pete	\N	\N /
+273232	c112a400-af49-4665-8bba-741531d962a1	Zachary	Zachary	\N	\N /
+
+ARTIST_TYPE  - SAMPLE DATA: /
+artist_type_id artist_type nothing_col bad_col  comment gid /
+5	Orchestra	2	0	\N	a0b36c92-3eb1-3839-a4f9-4799823f54a5 /
+6	Choir	2	0	\N	6124967d-7e3a-3eba-b642-c9a2ffb44d94 /
+2	Group	\N	2	\N	e431f5f6-b5d2-343d-8b36-72607fffb74b /
+
+EVENT - SAMPLE DATA: /
+event_id    gid event_name  begin_year  begin_month /
+1607	ebe6ce0f-22c0-4fe7-bfd4-7a0397c9fe94	Taubertal-Festival 2004, Day 1	2004	8 /
+20	5774273c-bb54-480e-89c3-1f71326402ed	Shakespeare Company Berlin at Ilmbühne	2014	8 /
+1595	14084715-6306-4126-9062-865080e6db2d	「Kaléidoscope—天使の狂宴—」@ Zepp Osaka	2007	8 /
+
+EVENT_TYPE - SAMPLE DATA: /
+event_type_id   event_type  sort_event_type comment gid / 
+1	Concert	\N	1	An individual concert by a single artist or collaboration, often with supporting artists who perform before the main act.	ef55e8d7-3d00-394a-8012-f5506a29ff0b /
+2	Festival	\N	2	An event where a number of different acts perform across the course of the day. Larger festivals may be spread across multiple days.	b6ded574-b592-3f0e-b56e-5b5f06aa0678 /
+3	Launch event	\N	3	A party, reception or other event held specifically for the launch of a release.	caee15f1-f9c4-3122-821f-34ea4011ac7d /
+
+GENDER - SAMPLE DATA: /
+gender_id   gender_type null_col    sort_gender_type    comment /
+2	Female	\N	2	\N	93452b5a-a947-30c8-934f-6a4056b151c2 /
+3	Other	\N	3	\N	081c0bf5-da60-37b0-95f8-2207a3f7f9d6 /
+1	Male	\N	1	\N	36d3d30a-839d-3eda-8cb3-29be4384e4a9 /
+
+LABEL - SAMPLE DATA: /
+label_id    gid label_name  begin_year  begin_month /
+1	f43e252d-9ebf-4e8e-bba8-36d080756cc1	Deleted Label	\N	\N /
+2	39c4dc0c-badb-4ac3-b810-e4f374dff6d9	Certificate 18	\N	\N /
+103730	6f70a5cb-99a7-4a42-9208-412446d4aa0f	Flo Master Inc.	\N	\N /
+
+LABEL_TYPE - SAMPLE DATA: /
+label_id    label_type  null_col    useless_col comment gid /
+1	Distributor	\N	0	\N	53ab8dcc-9946-3b62-966e-7634d78e5034 /
+2	Holding	\N	0	\N	43f31a62-97e4-36f6-9752-453c131b71ed /
+3	Production	\N	0	\N	a2426aab-2dd4-339c-b47d-b4923a241678 /
+
+LANGUAGE - SAMPLE DATA: /
+language_id nothing_col null_col    langage_name    t_f_col lang_name_short /
+4369	\N	\N	\N	Montagnais	1	moe /
+4663	\N	\N	\N	Min Nan Chinese	1	nan /
+5690	\N	\N	\N	Réunion Creole French	1	rcf /
+
+PLACE - SAMPLE DATA: /
+place_id    gid place_name  type    address /
+11376	caa66bca-1a61-493c-90ef-342784f822c1	Dunedin Muso's Club	2	12 Manse St, Dunedin, New Zealand 9016	/
+11377	d22f0929-169f-4053-a118-c5f29aa9aa1b	Joseph James Studios	1		/
+2657	a308a7f3-3767-4527-bb19-65e6ace6124f	Lovelite Studios	1		 /
+
+PLACE_TYPE - SAMPLE DATA: /
+place_type_id   place_name  null_col    useless_col comment gid /
+3	Other	\N	99	\N	a0df5ead-0bd6-33d8-8444-855a9f3e9970 /
+1	Studio	\N	1	A place designed for non-live production of music, typically a recording studio.	05fa6a09-ff92-3d34-bdbb-5141d3c24f38 /
+2	Venue	\N	2	A place that has live artistic performances as one of its primary functions, such as a concert hall.	cd92781a-a73f-30e8-a430-55d7521338db /
+
+RECORDING - SAMPLE DATA:  /
+rec_id  gid rec_name    artist_id   length  comment /
+
+RELEASE - SAMPLE DATA: /
+rel_id  gid                                     rel_name            artist_id   rel_group /
+9       425cf29a-1490-43ab-abfa-7b17a2cec351	A Sorta Fairytale	60	        896742	/
+10	    a96e1d03-e685-3627-8cba-f5b96be7158f	A Sorta Fairytale	60	        896742	/
+11	    dd1c5726-5a38-47e1-9747-18b919b9948a	Glory of the 80's	60	        95360	/
+
+RELEASE_GROUP - SAMPLE DATA: /
+rel_gr_id   gid rel_gr_name artist_id   rel_type /
+1964563	f59da930-70ba-4992-a346-7ed2d8e3cda8	Wande	627364	1		0	2018-04-30 23:56:50.245482+00/
+12	2b10653e-655d-34fe-9db4-77242d817a17	Chore of Enchantment	12	1		0	2009-05-24 20:47:00.490177+00 /
+13	0eac6659-d590-3eb7-8c13-ed8b3fdf4ef7	The Inevitable	11	1		0	2009-05-24 20:47:00.490177+00 /
+
+RELEASE_GROUP_PRIMARY_TYPE - SAMPLE DATA: /
+release_group_type_id   release_group_name  null_col useless_col    comment gid /
+1	Album	\N	1	\N	f529b476-6e62-324f-b0aa-1f3e33d313fc /
+2	Single	\N	2	\N	d6038452-8ee0-3f68-affc-2de9a1ede0b9 /
+3	EP	\N	3	\N	6d0c5bf6-7a33-3420-a519-44fc63eedebf /
+
+RELEASE_STATUS - SAMPLE DATA: /
+release_status_id   release_status_name null_col    sort_status_col comment /
+1	Official	\N	1	Any release officially sanctioned by the artist and/or their record company. Most releases will fit into this category.	4e304316-386d-3409-af2e-78857eec5cfe /
+2	Promotion	\N	2	A give-away release or a release intended to promote an upcoming official release (e.g. pre-release versions, releases included with a magazine, versions supplied to radio DJs for air-play).	518ffc83-5cde-34df-8627-81bff5093d92 /
+3	Bootleg	\N	3	An unofficial/underground release that was not sanctioned by the artist and/or the record company. This includes unofficial live recordings and pirated releases.	1156806e-d06a-38bd-83f0-cf2284a808b9 /
+
+SCRIPT - SAMPLE DATA: /
 
 
-Each datafile in our dataset has many columns. We are only showing 5 columns in our sample data as an example./
+URL - SAMPLE DATA: /
+url_id  gid link    edits_pend last_up /
+5980861	d232c890-d7a6-4888-a65e-94744a334f45	https://open.spotify.com/artist/4QtHE540B0R3NREWskQJcA	0	2019-05-13 18:55:36.836953+00 /
+5980862	cfd6fdad-5bad-4cf3-81c0-bea569a5a7c5	https://www.deezer.com/artist/11438082	0	2019-05-13 18:55:36.836953+00 /
+3909279	df0d4cd1-0b14-4bfc-bb42-a27e3b41b7fc	https://rateyourmusic.com/artist/patrick_swayze	0	2016-10-12 02:36:03.302308+00 /
 
-EDUCATION - SAMPLE DATA (total 366 cols)/
-GEOID		AreaName		(MALES 18-24) LESS THAN 9TH GRADE	(MALES 18-24) 9TH-12TH GRADE	(MALES 18-24) HIGH SCHOOL DIPLOMA/
-04000US01	Alabama			5870					39399				80453/
-04001US01	Alabama -- Urban	3236					23001				47196/
-04043US01	Alabama -- Rural	2634					16398				33257/
-
-
-SEX&AGE - SAMPLE DATA (total 368 cols)/
-GEOID		AreaName		(MALES) AGE UNDER 5	(MALES) AGE 5-9		(MALES) AGE 10-14/
-04000US01	Alabama			150860			156380			161596/
-04001US01	Alabama -- Urban	93605			95515			93812/
-04043US01	Alabama -- Rural	57255			60865			67784/
-
-
-RACE - SAMPLE DATA (total 225 cols)/
-GEOID		AreaName		TOTAL POP.	WHITE POP.	BLACK POP./
-04000US01	Alabama			4830620		3325464		1276544/
-04001US01	Alabama -- Urban	2867593		1744088		966888/
-04043US01	Alabama -- Rural	1963027		1581376		309656/
-
-
-EARNINGS - SAMPLE DATA (total 1,100 cols)/
-GEOID		AreaName		(MALES 16+) $1-$2499 OR LOSS	(MALES 16+) $2500-$4999		(MALES 16+) $5000-$7499/
-04000US01	Alabama			68391				45991				47703/
-04001US01	Alabama -- Urban	43914				29982				30569/
-04043US01	Alabama -- Rural	24477				16009				17134/
-
-
-LANGUAGE - SAMPLE DATA (total 525 cols)/
-GEOID		AreaName		(POP. AGE 5+)	(POP. AGE 5+) ENGLISH ONLY	(POP. AGE 5+) SPANISH/
-04000US01	Alabama			4535566		4300026				150337/
-04001US01	Alabama -- Urban	2681204		2504513				106550/
-04043US01	Alabama -- Rural	1854362		1795513				43787/
-
-The original source for the data is data.world
-- Language: https://data.world/uscensusbureau/acs-2015-5-e-language
-- Education: https://data.world/uscensusbureau/acs-2015-5-e-education
-- Earnings: https://data.world/uscensusbureau/acs-2015-5-e-earnings
-- Sex&Age: https://data.world/uscensusbureau/acs-2015-5-e-agesex
-- Race: https://data.world/uscensusbureau/acs-2015-5-e-race
-
-The specific files we used and csv compilations of the data from the relevant states are located in our google drive:
-https://drive.google.com/drive/u/0/folders/1DYz3r3CtmNtWKYI8eNaS9F72JBIhlGvI
+WORK - SAMPLE DATA: /
+work_id gid work_name   type    comment /
+12431434	86c6dd66-0da8-4b0f-8b78-ec9d4f12c5c4	Here to Go	\N		0	2011-07-02 15:29:31.688537+00 /
+12433103	712ff9ea-20d2-4c1a-aab7-6e4b7df9b4b2	1 John 4:16	17	The Mountain Goats song	0	2011-09-09 02:36:50.327637+00 /
+12610029	ff2ebf6a-338d-468f-a0dd-ee5f489a962d	Goddess (of the Sad Man)	17		0	2013-04-17 11:06:21.906341+00 /
