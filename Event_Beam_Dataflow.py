@@ -1,3 +1,4 @@
+import datetime
 import apache_beam as beam
 from apache_beam.io import WriteToText
 import logging
@@ -21,58 +22,60 @@ class ReplaceValsFn(beam.DoFn):
             elif record[key] == 'f':
                 record[key] = 'False'
         # return data as a tuple
-        area_tuple = (element)
-        return [area_tuple]
+        rel_tuple = (element)
+        return [rel_tuple]
 
-class TypecastAreaFn(beam.DoFn):
+class TypecastEventFn(beam.DoFn):
     def process(self, element):
-        area_row = element
+        event_row = element
 
         # get the row's attributes to be typecasted
-        area_id = area_row.get('area_id')
-        area_type = area_row.get('area_type')
-        begin_year = area_row.get('begin_year')
-        begin_month = area_row.get('begin_month')
-        begin_day = area_row.get('begin_day')
-        end_year = area_row.get('end_year')
-        end_month = area_row.get('end_month')
-        end_day = area_row.get('end_day')
-        ended = area_row.get('ended')
+        event_id = event_row.get('event_id')
+        begin_year = event_row.get('begin_year')
+       	begin_month = event_row.get('begin_month')
+        begin_day = event_row.get('begin_day')
+        end_year = event_row.get('end_year')
+        end_month = event_row.get('end_month')
+        end_day = event_row.get('end_day')
+        event_type = event_row.get('event_type')
+        cancelled = event_row.get('cancelled')
 
         # typecast the row's attributes to correct type or leave as None
-        area_row['area_id'] = int(area_id) if area_id else None
-        area_row['area_type'] = int(area_type) if area_type else None
-        area_row['begin_year'] = int(begin_year) if begin_year else None
-        area_row['begin_month'] = int(begin_month) if begin_month else None
-        area_row['begin_day'] = int(begin_day) if begin_day else None
-        area_row['end_year'] = int(end_year) if end_year else None
-        area_row['end_month'] = int(end_month) if end_month else None
-        area_row['end_day'] = int(end_day) if end_day else None
-        area_row['ended'] =  bool(ended) if ended else None
+        event_row['event_id'] = int(event_id) if event_id else None
+        event_row['begin_year'] = int(begin_year) if begin_year else None
+        event_row['begin_month'] = int(begin_month) if begin_month else None
+        event_row['begin_day'] = int(begin_day) if begin_day else None
+        event_row['end_year'] = int(end_year) if end_year else None
+        event_row['end_month'] = int(end_month) if end_month else None
+        event_row['end_day'] = int(end_day) if end_day else None
+        event_row['event_type'] = int(event_type) if event_type else None
+        event_row['cancelled'] =  bool(cancelled) if cancelled else None
         
         # return data as a tuple
-        return [(area_row)]
+        return [(event_row)]
 
 def run():
     PROJECT_ID = 'earnest-keep-266820'
     BUCKET = 'gs://jeffersonballers-yeet'
-    DIR_PATH = BUCKET + '/output/'
+    DIR_PATH = BUCKET + '/output/' + datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '/'
 
     # run pipeline on Dataflow 
     options = {
-        'runner': 'DirectRunner',
-        'job_name': 'area-beam',
+        'runner': 'DataflowRunner',
+        'job_name': 'event-beam-dataflow',
         'project': PROJECT_ID,
         'temp_location': BUCKET + '/temp',
-        'staging_location': BUCKET + '/staging'
+        'staging_location': BUCKET + '/staging',
+        'machine_type': 'n1-standard-4', # https://cloud.google.com/compute/docs/machine-types
+        'num_workers': 1
     }
 
     opts = beam.pipeline.PipelineOptions(flags=[], **options)
 
-    p = beam.Pipeline('DirectRunner', options=opts)
+    p = beam.Pipeline('DataflowRunner', options=opts)
     
     # query data from big query dataset
-    sql = 'SELECT * from musicbrainz_modeled.Area limit 500'
+    sql = 'SELECT * from musicbrainz_modeled.Event'
     bq_source = beam.io.BigQuerySource(query=sql, use_standard_sql=True)
     query_results = p | 'Read from BigQuery' >> beam.io.Read(bq_source)
     
@@ -86,15 +89,15 @@ def run():
     replaced_vals_pcoll | 'Write log 1' >> WriteToText('replaced_vals_pcoll.txt')
     
     # apply ParDo to format the student's date of birth  
-    casted_vals_pcoll = replaced_vals_pcoll | 'Typecasts values to correct datatypes.' >> beam.ParDo(TypecastAreaFn())
+    casted_vals_pcoll = replaced_vals_pcoll | 'Typecasts values to correct datatypes.' >> beam.ParDo(TypecastEventFn())
     
     # write final PCollection to output file
     casted_vals_pcoll | 'Write log 2' >> WriteToText('output.txt')
     
     # create a new data table in the modeled dataset in big query
     dataset_id = 'musicbrainz_modeled'
-    table_id = 'Area_Beam'
-    schema_id = 'area_id:INT64,area_name:STRING,area_type:INT64,begin_year:INT64,begin_month:INT64,begin_day:INT64,end_year:INT64,end_month:INT64,end_day:INT64,ended:BOOL'
+    table_id = 'Event_Beam_DF'
+    schema_id = 'event_id:INT64,event_name:STRING,begin_year:INT64,begin_month:INT64,begin_day:INT64,end_year:INT64,end_month:INT64,end_day:INT64,start_time:STRING,event_type:INT64,cancelled:BOOL,setlist:STRING,comment:STRING'
 
     # write final PCollection to new BQ table
     casted_vals_pcoll | 'Write BQ table' >> beam.io.WriteToBigQuery(dataset=dataset_id, 

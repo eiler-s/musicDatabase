@@ -21,37 +21,37 @@ class ReplaceValsFn(beam.DoFn):
             elif record[key] == 'f':
                 record[key] = 'False'
         # return data as a tuple
-        area_tuple = (element)
-        return [area_tuple]
+        rel_tuple = (element)
+        return [rel_tuple]
 
-class TypecastAreaFn(beam.DoFn):
+class TypecastReleaseFn(beam.DoFn):
     def process(self, element):
-        area_row = element
+        rel_row = element
 
         # get the row's attributes to be typecasted
-        area_id = area_row.get('area_id')
-        area_type = area_row.get('area_type')
-        begin_year = area_row.get('begin_year')
-        begin_month = area_row.get('begin_month')
-        begin_day = area_row.get('begin_day')
-        end_year = area_row.get('end_year')
-        end_month = area_row.get('end_month')
-        end_day = area_row.get('end_day')
-        ended = area_row.get('ended')
+        rel_id = rel_row.get('rel_id')
+        artist_id = rel_row.get('artist_id')
+        rel_group = rel_row.get('rel_group')
+        status = rel_row.get('status')
+        packaging = rel_row.get('packaging')
+        language = rel_row.get('language')
+        script = rel_row.get('script')
+        barcode = rel_row.get('barcode')
+        quality = rel_row.get('quality')
 
         # typecast the row's attributes to correct type or leave as None
-        area_row['area_id'] = int(area_id) if area_id else None
-        area_row['area_type'] = int(area_type) if area_type else None
-        area_row['begin_year'] = int(begin_year) if begin_year else None
-        area_row['begin_month'] = int(begin_month) if begin_month else None
-        area_row['begin_day'] = int(begin_day) if begin_day else None
-        area_row['end_year'] = int(end_year) if end_year else None
-        area_row['end_month'] = int(end_month) if end_month else None
-        area_row['end_day'] = int(end_day) if end_day else None
-        area_row['ended'] =  bool(ended) if ended else None
+        rel_row['rel_id'] = int(rel_id) if rel_id else None
+        rel_row['artist_id'] = int(artist_id) if artist_id else None
+        rel_row['rel_group'] = int(rel_group) if rel_group else None
+        rel_row['status'] = int(status) if status else None
+        rel_row['packaging'] = int(packaging) if packaging else None
+        rel_row['language'] = int(language) if language else None
+        rel_row['script'] = int(script) if script else None
+        rel_row['barcode'] = int(barcode) if barcode else None
+        rel_row['quality'] =  int(quality) if quality else None
         
         # return data as a tuple
-        return [(area_row)]
+        return [(rel_row)]
 
 def run():
     PROJECT_ID = 'earnest-keep-266820'
@@ -61,7 +61,7 @@ def run():
     # run pipeline on Dataflow 
     options = {
         'runner': 'DirectRunner',
-        'job_name': 'area-beam',
+        'job_name': 'rel-beam',
         'project': PROJECT_ID,
         'temp_location': BUCKET + '/temp',
         'staging_location': BUCKET + '/staging'
@@ -72,29 +72,29 @@ def run():
     p = beam.Pipeline('DirectRunner', options=opts)
     
     # query data from big query dataset
-    sql = 'SELECT * from musicbrainz_modeled.Area limit 500'
+    sql = 'SELECT * from musicbrainz_modeled.Release limit 500'
     bq_source = beam.io.BigQuerySource(query=sql, use_standard_sql=True)
     query_results = p | 'Read from BigQuery' >> beam.io.Read(bq_source)
     
     # write source PCollection to input file
-    query_results | 'Write input.tx' >> WriteToText('input.txt')
+    query_results | 'Write input.txt' >> WriteToText('input.txt')
     
     # apply ParDo to ReplaceValsFn to change '\N' to nul
     replaced_vals_pcoll = query_results | 'Replace t/f and n' >> beam.ParDo(ReplaceValsFn())
 
     # write PCollection to log file
-    replaced_vals_pcoll | 'Write log 1' >> WriteToText('replaced_vals_pcoll.txt')
+    replaced_vals_pcoll | 'Write log 1' >> WriteToText('replaced_vals_pcoll_release.txt')
     
     # apply ParDo to format the student's date of birth  
-    casted_vals_pcoll = replaced_vals_pcoll | 'Typecasts values to correct datatypes.' >> beam.ParDo(TypecastAreaFn())
+    casted_vals_pcoll = replaced_vals_pcoll | 'Typecasts values to correct datatypes.' >> beam.ParDo(TypecastReleaseFn())
     
     # write final PCollection to output file
     casted_vals_pcoll | 'Write log 2' >> WriteToText('output.txt')
     
     # create a new data table in the modeled dataset in big query
     dataset_id = 'musicbrainz_modeled'
-    table_id = 'Area_Beam'
-    schema_id = 'area_id:INT64,area_name:STRING,area_type:INT64,begin_year:INT64,begin_month:INT64,begin_day:INT64,end_year:INT64,end_month:INT64,end_day:INT64,ended:BOOL'
+    table_id = 'Release_Beam'
+    schema_id = 'rel_id:INT64,rel_name:STRING,artist_id:INT64,rel_group:INT64,status:INT64,packaging:INT64,language:INT64,script:INT64,barcode:INT64,comment:STRING,quality:INT64'
 
     # write final PCollection to new BQ table
     casted_vals_pcoll | 'Write BQ table' >> beam.io.WriteToBigQuery(dataset=dataset_id, 

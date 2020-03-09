@@ -1,3 +1,4 @@
+import datetime
 import apache_beam as beam
 from apache_beam.io import WriteToText
 import logging
@@ -56,23 +57,25 @@ class TypecastAreaFn(beam.DoFn):
 def run():
     PROJECT_ID = 'earnest-keep-266820'
     BUCKET = 'gs://jeffersonballers-yeet'
-    DIR_PATH = BUCKET + '/output/'
+    DIR_PATH = BUCKET + '/output/' + datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '/'
 
     # run pipeline on Dataflow 
     options = {
-        'runner': 'DirectRunner',
-        'job_name': 'area-beam',
+        'runner': 'DataflowRunner',
+        'job_name': 'area-beam-dataflow',
         'project': PROJECT_ID,
         'temp_location': BUCKET + '/temp',
-        'staging_location': BUCKET + '/staging'
+        'staging_location': BUCKET + '/staging',
+        'machine_type': 'n1-standard-4', # https://cloud.google.com/compute/docs/machine-types
+        'num_workers': 1
     }
 
     opts = beam.pipeline.PipelineOptions(flags=[], **options)
 
-    p = beam.Pipeline('DirectRunner', options=opts)
+    p = beam.Pipeline('DataflowRunner', options=opts)
     
     # query data from big query dataset
-    sql = 'SELECT * from musicbrainz_modeled.Area limit 500'
+    sql = 'SELECT * from musicbrainz_modeled.Area'
     bq_source = beam.io.BigQuerySource(query=sql, use_standard_sql=True)
     query_results = p | 'Read from BigQuery' >> beam.io.Read(bq_source)
     
@@ -93,7 +96,7 @@ def run():
     
     # create a new data table in the modeled dataset in big query
     dataset_id = 'musicbrainz_modeled'
-    table_id = 'Area_Beam'
+    table_id = 'Area_Beam_DF'
     schema_id = 'area_id:INT64,area_name:STRING,area_type:INT64,begin_year:INT64,begin_month:INT64,begin_day:INT64,end_year:INT64,end_month:INT64,end_day:INT64,ended:BOOL'
 
     # write final PCollection to new BQ table
