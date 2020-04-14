@@ -131,3 +131,11 @@ work_id gid work_name   type    comment /
 12431434	86c6dd66-0da8-4b0f-8b78-ec9d4f12c5c4	Here to Go	\N		0	2011-07-02 15:29:31.688537+00 /
 12433103	712ff9ea-20d2-4c1a-aab7-6e4b7df9b4b2	1 John 4:16	17	The Mountain Goats song	0	2011-09-09 02:36:50.327637+00 /
 12610029	ff2ebf6a-338d-468f-a0dd-ee5f489a962d	Goddess (of the Sad Man)	17		0	2013-04-17 11:06:21.906341+00 /
+
+
+### SECONDARY DATASET ###
+https://data.discogs.com/?prefix=data/2020/
+We will use the discogs dataset as our secondary dataset. The database has artists, labels, releases and master releases, 
+which correspond to release groups in the Musicbrainz database. 
+
+The data is in XML format. All tables are more than 10,000 rows. Each table has many attributes. 
