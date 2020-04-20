@@ -1,0 +1,16 @@
+1st Query: Find how many artists from the musicbrainz dataset are bands in the discogs dataset.
+This query will combine the 'name' field of the Band dataset and the 'name' field of the Aliases dataset from discogs modeled 
+with the 'artist_name' field from the Artist dataset from musicbrainz modeled. The result will be a single number of how many 
+bands are represented across both datasets. This is interesting because the musicbrainz database does not distinguish between
+bands and individual artists, and this could lead to categorizing many musicbrainz artists as either bands or individuals. 
+
+2nd Query: Connect Artist_URL from discogs to URL from musicbrainz.
+One problem with the musicbrainz dataset is that it didn't connect artist names to the URLs it provided for those artists.
+Since discogs does, we will compare the URLs to see if we can add any new information about artists to the musicbrainz URL dataset.
+URLs are represented as strings, so it should be straightforward to compare them. The result should be a junction table with
+artist information about any matching URLs from the datasets.
+
+3rd Query: Compare labels across musicbrainz and discogs.
+Currently in the discogs dataset there are some sub-labels who list parent labels that do not exist as keys in the table. 
+We will fix these violations in beam and then compare the labels from the musicbrainz and discogs dataset. The result will be a table
+with information from both datasets about labels.
