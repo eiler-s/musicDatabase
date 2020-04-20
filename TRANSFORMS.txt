@@ -9,6 +9,7 @@ The event table has a start_time attribute that contains strings of event start 
 
 The year, month, day attributes found in many tables contain an inconsistent number of digits in there formatting. For example, what should / be the year '2019' in records may be trucated to just '19'. We will want to reformat these to a number of digits that is compatible with the / DATETIME bigquery datatype so that they can be concattenated these integer columns into a new column containing DATETIME values. /
 
+UPDATED (4/19/2020):
 For our secondary dataset, there were not many issues in the data. Each row had a data quality attribute that could be one of several
 values and indicates the validity of the data in that row. We first removed any rows that had a data quality value of 'Entirely Incorrect'
 in the discogs_staging notebook (since the tables were not yet modeling individual entities we didn't want to do it in the modeled
