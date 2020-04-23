@@ -134,10 +134,8 @@ work_id gid work_name   type    comment /
 
 
 ### SECONDARY DATASET ###
-https://data.discogs.com/?prefix=data/2020/
-We will use the discogs dataset as our secondary dataset. The database has artists (304 MB), labels (51.1 MB), releases (7.7 GB) 
-and master releases (302 MB), which correspond to artist, label, releases and release group in the Musicbrainz database. 
+https://data.discogs.com/?prefix=data/2020
+We will use the discogs dataset as our secondary dataset. The database has artists (304 MB) and labels (51.1 MB) which correspond to artist and label in the Musicbrainz database. We did not use the available masters and releases datafiles because they were either too big for us to download and too complex to convert from XML to CSV.
 
 The data is in XML format. All tables are more than 10,000 rows. Each table has many attributes as well. In preparation for loading
-into big query, we are transforming the data to JSON format. We are struggling with the releases data, since it is so large. It is
-difficult to transform into JSON format, so for milestone 9 we will not be including this set.
+into big query, we are transforming the data to JSON format and then to CSV. We lost several thousand records due to corruption of the data between format conversions, but are still witin the mileston requirements. We will have to correct for this loss in PK and FK relationships when modeling the data. To view sample data, look in the discogs_ingest jupyter notebook.
